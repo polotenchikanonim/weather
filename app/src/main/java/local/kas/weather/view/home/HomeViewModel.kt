@@ -1,4 +1,4 @@
-package local.kas.weather.ui.home
+package local.kas.weather.view.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package local.kas.weather.ui.home
+package local.kas.weather.view.home
 
 import android.os.Bundle
 import android.util.Log
@@ -15,13 +15,9 @@ import local.kas.weather.databinding.FragmentHomeBinding
 class HomeFragment : Fragment() {
 
 
-    private val TAG: String = "myLogs"
-
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -29,8 +25,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         initView()
@@ -47,7 +42,7 @@ class HomeFragment : Fragment() {
 //        b. Создать Object. В Object вызвать copy и вывести значения скопированного класса на экран.
 //        Repository.getData()
         val admin = person.copy()
-
+        println(admin)
 
 //        c. Вывести значения из разных циклов в консоль, используя примеры из методических материалов.
         for (i in 1..10) {
@@ -66,9 +61,9 @@ class HomeFragment : Fragment() {
             Log.d(TAG, "$it")
         }
 
-        val daysOfWeek = listOf("sunday", "monday", "tuesday", "wednesday");
+        val daysOfWeek = listOf("sunday", "monday", "tuesday", "wednesday")
         daysOfWeek.forEach {
-            Log.d(TAG, it)
+            Log.d(TAG, "$it $TAG")
         }
 
         for (day in daysOfWeek) {
@@ -79,14 +74,15 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
 //        4. Добавить кнопку в разметку и повесить на неё clickListener в Activity.
-        val textView: TextView = binding.textHome  // интересное место
+//        val textView: TextView = binding.textHome  // интересное место
         homeViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
+            binding.textHome.text = it
         })
 
-        textView.setOnClickListener {
+        binding.textHome.setOnClickListener {
             println(123)
-            Toast.makeText(textView.context, textView.text, Toast.LENGTH_LONG).show()
+            Toast.makeText(binding.textHome.context, binding.textHome.text, Toast.LENGTH_LONG)
+                .show()
         }
 
     }
@@ -94,5 +90,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val TAG = "MyActivity"
     }
 }
