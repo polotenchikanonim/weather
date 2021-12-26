@@ -5,17 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import local.kas.weather.Person
 import local.kas.weather.databinding.FragmentHomeBinding
+import local.kas.weather.viewmodel.AppState
+import local.kas.weather.viewmodel.MainViewModel
 
 class HomeFragment : Fragment() {
 
+    //    private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var mainViewModel: MainViewModel
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
@@ -25,12 +28,18 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        mainViewModel.getLiveData()
+            .observe(viewLifecycleOwner, Observer<AppState> { renderData(it) })
+        mainViewModel.getWeatherFromServer()
+//        val root: View = binding.root
         initView()
         work()
-        return root
+
+        return binding.root
     }
 
     private fun work() {
@@ -75,14 +84,32 @@ class HomeFragment : Fragment() {
     private fun initView() {
 //        4. Добавить кнопку в разметку и повесить на неё clickListener в Activity.
 //        val textView: TextView = binding.textHome  // интересное место
-        homeViewModel.text.observe(viewLifecycleOwner, {
-            binding.textHome.text = it
+
+        val button = binding.textHome
+        mainViewModel.text.observe(viewLifecycleOwner, {
+            button.text = it
         })
 
-        binding.textHome.setOnClickListener {
+        button.setOnClickListener {
             println(123)
-            Toast.makeText(binding.textHome.context, binding.textHome.text, Toast.LENGTH_LONG)
+            Toast.makeText(button.context, button.text, Toast.LENGTH_LONG)
                 .show()
+        }
+
+    }
+
+    private fun renderData(appState: AppState) {
+        val context = requireContext()
+        when (appState) {
+            is AppState.Error -> Toast.makeText(
+                context, appState.error.message, Toast.LENGTH_SHORT
+            ).show()
+            is AppState.Loading -> Toast.makeText(
+                context, "${appState.progress}", Toast.LENGTH_SHORT
+            ).show()
+            is AppState.Success -> Toast.makeText(
+                context, appState.weatherData+" "+appState.feelingWeather, Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
