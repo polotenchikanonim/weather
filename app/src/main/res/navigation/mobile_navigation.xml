@@ -7,19 +7,8 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="local.kas.weather.view.home.HomeFragment"
+        android:name="local.kas.weather.view.home.WeatherFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="local.kas.weather.view.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="local.kas.weather.view.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
 </navigation>
