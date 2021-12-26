@@ -9,13 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import local.kas.weather.databinding.FragmentHomeBinding
 import local.kas.weather.viewmodel.AppState
-import android.R
 
 
 class WeatherFragment : Fragment() {
 
     private lateinit var weatherViewModel: WeatherViewModel
-
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
@@ -34,11 +32,9 @@ class WeatherFragment : Fragment() {
         return binding.root
     }
 
-
     private fun initView() {
 
     }
-
 
     private fun renderData(appState: AppState) {
         if (binding.loadingLayout.visibility == View.VISIBLE) {
@@ -66,7 +62,7 @@ class WeatherFragment : Fragment() {
         val latLon =
             "lt/ln: ${appState.weatherData.city.latitude} ${appState.weatherData.city.longitude}"
         binding.cityCoordinates.text = latLon
-        binding.temperatureValue.text = "${appState.weatherData.temperature}"
+        binding.temperatureValue.text = appState.weatherData.temperature
         binding.feelsLikeValue.text = appState.weatherData.feelsLike
     }
 
