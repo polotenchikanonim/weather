@@ -19,14 +19,11 @@ class WeatherFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         weatherViewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        weatherViewModel.getLiveData()
-            .observe(viewLifecycleOwner, { renderData(it) })
+        weatherViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         weatherViewModel.getWeather()
         initView()
         return binding.root
@@ -59,6 +56,7 @@ class WeatherFragment : Fragment() {
 //            appState.weatherData.city.latitude,
 //            appState.weatherData.city.longitude
 //        )
+
         val latLon =
             "lt/ln: ${appState.weatherData.city.latitude} ${appState.weatherData.city.longitude}"
         binding.cityCoordinates.text = latLon
