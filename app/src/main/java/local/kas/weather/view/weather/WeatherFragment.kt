@@ -1,4 +1,4 @@
-package local.kas.weather.view.home
+package local.kas.weather.view.weather
 
 import android.os.Bundle
 import android.view.LayoutInflater
