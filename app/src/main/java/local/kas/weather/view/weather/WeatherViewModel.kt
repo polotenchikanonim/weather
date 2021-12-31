@@ -1,75 +1,41 @@
 package local.kas.weather.view.weather
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import local.kas.weather.model.Weather
+import local.kas.weather.model.Repository
+import local.kas.weather.model.RepositoryImpl
 import local.kas.weather.viewmodel.AppState
+import java.lang.Thread.sleep
+
 
 class WeatherViewModel(
-    private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-//    private val repositoryImpl: RepositoryImpl = RepositoryImpl()
+    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
+    private val repositoryImpl: Repository = RepositoryImpl()
 ) :
     ViewModel() {
 
-    fun getLiveData(): LiveData<AppState> {
-        return liveData
-    }
+    fun getLiveData() = liveDataToObserve
 
-//    private val _text = MutableLiveData<String>().apply {
-//        value = "This is home Fragment"
-//    }
-//
-//    val text: LiveData<String> = _text
+    fun getWeatherFromLocalSourceRus() = getDataFromLocalSource(isRussian = true)
 
-    fun getWeather() {
-//        скоро будет какой то переключатель
-//        repositoryImpl.getWeatherFromServer()
+    fun getWeatherFromLocalSourceWorld() = getDataFromLocalSource(isRussian = false)
+
+    fun getWeatherFromRemoteSource() = getDataFromLocalSource(isRussian = true)
+
+    private fun getDataFromLocalSource(isRussian: Boolean) {
+        liveDataToObserve.value = AppState.Loading(0)
         Thread {
-            Thread.sleep(1000)
-            liveData.postValue(AppState.Error(IllegalAccessError("Error")))
-            Thread.sleep(3000)
-            liveData.postValue(AppState.Loading(0))
-            liveData.postValue(AppState.Loading(50))
-            Thread.sleep(3000)
-            liveData.postValue(AppState.Loading(100))
-            val rand = (-40..40).random()
-            when {
-                rand < -15 -> {
-                    postValue("$rand", "очень холодно")
-                }
-                rand < -10 -> {
-                    postValue("$rand", "холодно")
-                }
-                rand > 30 -> {
-                    postValue("+$rand", "очень жарко")
-                }
-                rand > 22 -> {
-                    postValue("+$rand", "жарко")
-                }
-                rand > 10 -> {
-                    postValue("+$rand", "тепло")
-                }
-                rand > 0 -> {
-                    postValue("+$rand", "тепло")
-                }
-                else -> {
-                    postValue("$rand", "прохладно")
-                }
-            }
-        }.start()
-    }
-
-    private fun postValue(rand: String, feelsLike: String) {
-        liveData.postValue(
-            AppState.Success(
-//                repositoryImpl.getWeatherFromServer()
-                Weather(
-                    temperature = rand,
-                    feelsLike = feelsLike
+            sleep(1000)
+            liveDataToObserve.postValue(
+                AppState.Success(
+                    if (isRussian) {
+                        repositoryImpl.getWeatherFromLocalStorageRus()
+                    }
+                    else {
+                        repositoryImpl.getWeatherFromLocalStorageWorld()
+                    }
                 )
             )
-        )
-
+        }.start()
     }
 }

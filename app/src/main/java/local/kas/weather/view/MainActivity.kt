@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.container)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_home), drawerLayout
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val navController = findNavController(R.id.container)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
