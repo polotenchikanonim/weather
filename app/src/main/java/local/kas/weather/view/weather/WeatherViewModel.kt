@@ -30,8 +30,7 @@ class WeatherViewModel(
                 AppState.Success(
                     if (isRussian) {
                         repositoryImpl.getWeatherFromLocalStorageRus()
-                    }
-                    else {
+                    } else {
                         repositoryImpl.getWeatherFromLocalStorageWorld()
                     }
                 )

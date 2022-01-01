@@ -22,16 +22,19 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val weather = arguments?.getParcelable<Weather>(BUNDLE_KEY)
         if (weather != null) {
-            binding.cityName.text = weather.city.name
-            binding.cityCoordinates.text = String.format(
-                getString(R.string.city_coordinates),
-                weather.city.latitude,
-                weather.city.longitude
-            )
-            binding.temperatureValue.text = weather.temperature.toString()
-            binding.feelsLikeValue.text = weather.feelsLike.toString()
-
+            setWeatherData(weather)
         }
+    }
+
+    private fun setWeatherData(weather: Weather) {
+        binding.cityName.text = weather.city.name
+        binding.cityCoordinates.text = String.format(
+            getString(R.string.city_coordinates),
+            weather.city.latitude,
+            weather.city.longitude
+        )
+        binding.temperatureValue.text = weather.temperature.toString()
+        binding.feelsLikeValue.text = weather.feelsLike.toString()
     }
 
 

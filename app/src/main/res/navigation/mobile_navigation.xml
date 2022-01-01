@@ -11,4 +11,11 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_weather" />
 
+
+    <fragment
+        android:id="@+id/nav_details"
+        android:name="local.kas.weather.view.details.DetailsFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_details" />
+
 </navigation>
