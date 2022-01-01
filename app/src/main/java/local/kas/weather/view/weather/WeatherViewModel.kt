@@ -9,10 +9,13 @@ import java.lang.Thread.sleep
 
 
 class WeatherViewModel(
-    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryImpl: Repository = RepositoryImpl()
+    private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
 ) :
     ViewModel() {
+
+    private val repositoryImpl: RepositoryImpl by lazy {
+       RepositoryImpl()
+    }
 
     fun getLiveData() = liveDataToObserve
 
