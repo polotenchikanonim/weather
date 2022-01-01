@@ -37,9 +37,11 @@ class RecyclerViewAdapter(val listener: OnItemClickListener) :
 
     inner class WeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(weather: Weather) {
-            itemView.findViewById<AppCompatTextView>(R.id.weatherItemTextView).text = weather.city.name
-            itemView.setOnClickListener {
-                listener.onItemClick(weather)
+            itemView.run {
+                findViewById<AppCompatTextView>(R.id.weatherItemTextView).text = weather.city.name
+                setOnClickListener {
+                    listener.onItemClick(weather)
+                }
             }
         }
     }

@@ -22,7 +22,9 @@ class WeatherFragment : Fragment(), OnItemClickListener {
 
     private val binding get() = _binding!!
 
-    private var recyclerViewAdapter = RecyclerViewAdapter(this)
+    private val recyclerViewAdapter: RecyclerViewAdapter by lazy {
+        RecyclerViewAdapter(this)
+    }
     private var isRussian = true
 
 
@@ -31,14 +33,21 @@ class WeatherFragment : Fragment(), OnItemClickListener {
     ): View {
         weatherViewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-        weatherViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-        binding.mainFragmentRecyclerView.adapter = recyclerViewAdapter
-        binding.mainFragmentFAB.setOnClickListener {
-            request()
-        }
-        weatherViewModel.getWeatherFromLocalSourceRus()
 
+        initView()
+
+        weatherViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+        weatherViewModel.getWeatherFromLocalSourceRus()
         return binding.root
+    }
+
+    private fun initView() {
+        with(binding) {
+            mainFragmentRecyclerView.adapter = recyclerViewAdapter
+            mainFragmentFAB.setOnClickListener {
+                request()
+            }
+        }
     }
 
     private fun request() {
@@ -53,16 +62,19 @@ class WeatherFragment : Fragment(), OnItemClickListener {
 
 
     private fun renderData(appState: AppState) {
-        if (binding.weatherFragmentLoadingLayout.visibility == View.VISIBLE) {
-            binding.weatherFragmentLoadingLayout.visibility = View.GONE
-        }
-        when (appState) {
-            is AppState.Error -> {
-                showErrorSnack(appState.error.message.toString())
+        with(binding) {
+            if (weatherFragmentLoadingLayout.visibility == View.VISIBLE) {
+                weatherFragmentLoadingLayout.visibility = View.GONE
             }
-            is AppState.Loading -> binding.weatherFragmentLoadingLayout.visibility = View.VISIBLE
-            is AppState.Success -> {
-                showWeather(appState)
+            when (appState) {
+                is AppState.Error -> {
+                    getString(R.string.city_coordinates)
+                    binding.root.showErrorSnack(R.string.city_coordinates)
+                }
+                is AppState.Loading -> weatherFragmentLoadingLayout.visibility = View.VISIBLE
+                is AppState.Success -> {
+                    showWeather(appState)
+                }
             }
         }
     }
@@ -71,10 +83,10 @@ class WeatherFragment : Fragment(), OnItemClickListener {
         recyclerViewAdapter.setWeather(appState.weatherData)
     }
 
-    private fun showErrorSnack(snack: String) {
+    private fun View.showErrorSnack(snack: Int) {
         Snackbar.make(
-            binding.root, snack, Snackbar.LENGTH_LONG
-        ).setAction("to try one more time") {
+            this, getString(snack), Snackbar.LENGTH_LONG
+        ).setAction(getString(R.string.try_one_more_time)) {
             request()
         }.show()
     }
@@ -87,9 +99,10 @@ class WeatherFragment : Fragment(), OnItemClickListener {
 
 
     override fun onItemClick(weather: Weather) {
-        val bundle = Bundle()
-        bundle.putParcelable(BUNDLE_KEY, weather)
         val navController = requireActivity().findNavController(R.id.container)
-        navController.navigate(R.id.nav_details, bundle)
+        navController.navigate(
+            R.id.nav_details,
+            Bundle().apply { putParcelable(BUNDLE_KEY, weather) }
+        )
     }
 }
