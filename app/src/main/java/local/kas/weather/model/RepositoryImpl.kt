@@ -8,5 +8,4 @@ class RepositoryImpl : Repository {
 
     override fun getWeatherFromLocalStorageWorld() = getWorldCities()
 
-
 }
