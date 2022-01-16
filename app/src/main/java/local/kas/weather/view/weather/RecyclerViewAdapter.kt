@@ -15,7 +15,7 @@ class RecyclerViewAdapter(val listener: OnItemClickListener) :
 
     fun setWeather(data: List<Weather>) {
         weatherData = data
-        notifyDataSetChanged()
+        notifyDataSetChanged() // i don't know how fix it
     }
 
 

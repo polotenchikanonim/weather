@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="local.kas.weather.view.weather.WeatherFragment"
+        android:name="local.kas.weather.view.weather.CitiesFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_weather" />
 
