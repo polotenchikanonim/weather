@@ -1,4 +1,4 @@
-package local.kas.weather.view.weather
+package local.kas.weather.view.cities
 
 import local.kas.weather.model.Weather
 

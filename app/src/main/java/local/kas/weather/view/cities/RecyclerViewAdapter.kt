@@ -1,4 +1,4 @@
-package local.kas.weather.view.weather
+package local.kas.weather.view.cities
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,7 @@ class RecyclerViewAdapter(val listener: OnItemClickListener) :
 
     fun setWeather(data: List<Weather>) {
         weatherData = data
-        notifyDataSetChanged() // i don't know how fix it
+        notifyDataSetChanged() // fixme please. Sorry i don't know
     }
 
 

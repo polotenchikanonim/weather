@@ -7,15 +7,16 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="local.kas.weather.view.weather.CitiesFragment"
+        android:name="local.kas.weather.view.cities.CitiesFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_weather" />
 
-
     <fragment
         android:id="@+id/nav_details"
-        android:name="local.kas.weather.view.details.DetailsFragment"
+        android:name="local.kas.weather.view.weather.DetailsFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_details" />
+
+
 
 </navigation>

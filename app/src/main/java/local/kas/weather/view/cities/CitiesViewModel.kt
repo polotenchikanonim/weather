@@ -1,4 +1,4 @@
-package local.kas.weather.view.weather
+package local.kas.weather.view.cities
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +21,6 @@ class CitiesViewModel(private val liveDataToObserve: MutableLiveData<CitiesAppSt
 
     private fun getDataFromLocalSource(isRussian: Boolean) {
         liveDataToObserve.value = CitiesAppState.Loading(0)
-
         liveDataToObserve.postValue(
             CitiesAppState.Success(
                 if (isRussian) {

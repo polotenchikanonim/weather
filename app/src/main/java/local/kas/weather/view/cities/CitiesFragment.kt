@@ -1,4 +1,4 @@
-package local.kas.weather.view.weather
+package local.kas.weather.view.cities
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import local.kas.weather.R
 import local.kas.weather.databinding.FragmentWeatherBinding
 import local.kas.weather.model.Weather
-import local.kas.weather.view.details.BUNDLE_KEY
+import local.kas.weather.view.weather.BUNDLE_KEY
 import local.kas.weather.viewmodel.CitiesAppState
 
 
@@ -64,6 +64,7 @@ class CitiesFragment : Fragment(), OnItemClickListener {
             if (weatherFragmentLoadingLayout.visibility == View.VISIBLE) {
                 weatherFragmentLoadingLayout.visibility = View.GONE
             }
+
             when (citiesAppState) {
                 is CitiesAppState.Error -> {
                     getString(R.string.city_coordinates)
@@ -71,13 +72,13 @@ class CitiesFragment : Fragment(), OnItemClickListener {
                 }
                 is CitiesAppState.Loading -> weatherFragmentLoadingLayout.visibility = View.VISIBLE
                 is CitiesAppState.Success -> {
-                    showWeather(citiesAppState)
+                    showCities(citiesAppState)
                 }
             }
         }
     }
 
-    private fun showWeather(citiesAppState: CitiesAppState.Success) {
+    private fun showCities(citiesAppState: CitiesAppState.Success) {
         recyclerViewAdapter.setWeather(citiesAppState.weatherData)
     }
 
