@@ -48,15 +48,14 @@ class WeatherService(name: String = "") : IntentService(name) {
     }
 
     private fun loadWeather(lat: Double, lon: Double) {
+        val urlAddress = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
         try {
-            val urlAddress = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
             val urlConnection = getUrlConnection(urlAddress)
             BufferedReader(InputStreamReader(urlConnection.inputStream)).use {
-                val response:String = convertResponse(
+                val response: String = convertResponse(
                     BufferedReader(InputStreamReader(urlConnection.inputStream, "UTF-8"))
                 )
-                val responseJ = JSONObject(response)
-                with(responseJ.getJSONObject("fact")) {
+                with(JSONObject(response).getJSONObject("fact")) {
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent(
                         BROADCAST_ACTION
                     ).apply {
