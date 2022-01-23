@@ -1,84 +1,85 @@
 package local.kas.weather.view.weather
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import local.kas.weather.databinding.FragmentDetailsBinding
-import local.kas.weather.model.Weather
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import local.kas.weather.R
+import local.kas.weather.databinding.FragmentWeatherBinding
+import local.kas.weather.model.City
 import local.kas.weather.model.WeatherDTO
+import local.kas.weather.utils.BUNDLE_KEY
+import local.kas.weather.viewmodel.WeatherAppState
 
 
-const val BUNDLE_KEY = "BUNDLE_KEY"
-const val BUNDLE_KEY_WEATHER = "BUNDLE_KEY_WEATHER"
-const val BROADCAST_ACTION = "BROADCAST_ACTION"
+class WeatherFragment : Fragment() {
 
-const val BUNDLE_KEY_LAT = "BUNDLE_KEY_LAT"
-const val BUNDLE_KEY_LON = "BUNDLE_KEY_LON"
-
-
-class DetailsFragment : Fragment() {
-
-    private var _binding: FragmentDetailsBinding? = null
+    private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
 
-
-    private val myBroadcastReceiver2: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let {
-                it.getParcelableExtra<WeatherDTO>(BUNDLE_KEY_WEATHER)?.let {
-                    setWeather(it)
-                }
-            }
-        }
+    private val viewModel: WeatherViewModel by lazy {
+        ViewModelProvider(this).get(WeatherViewModel::class.java)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.getLiveData().observe(viewLifecycleOwner, {
+            renderData(it)
+        })
         arguments?.let { it ->
-            it.getParcelable<Weather>(BUNDLE_KEY)?.let {
-                binding.cityName.text = it.city.name
-                val coordinates =
-                    "${it.city.latitude} ${it.city.longitude}"
+            it.getParcelable<City>(BUNDLE_KEY)?.let {
+                binding.cityName.text = it.name
+                val coordinates = "${it.lat} ${it.lon}"
                 binding.cityCoordinates.text = coordinates
-
-                requireActivity().startService(
-                    Intent(
-                        requireActivity(),
-                        WeatherService::class.java
-                    ).apply {
-                        putExtra(BUNDLE_KEY_LAT, it.city.latitude)
-                        putExtra(BUNDLE_KEY_LON, it.city.longitude)
-                    })
+                viewModel.getWeatherFromServer(it.lat, it.lon)
             }
         }
-        LocalBroadcastManager.getInstance(requireContext())
-            .registerReceiver(myBroadcastReceiver2, IntentFilter(BROADCAST_ACTION))
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    private fun renderData(weatherAppState: WeatherAppState) {
+        when (weatherAppState) {
+            is WeatherAppState.Error -> {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.city_coordinates),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            is WeatherAppState.Success -> {
+                setWeather(weatherAppState.weatherData)
+            }
+
+            is WeatherAppState.Loading -> {
+                Toast.makeText(requireContext(), "грузим", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setWeather(weatherDTO: WeatherDTO) {
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(myBroadcastReceiver2)
         with(binding) {
             with(weatherDTO) {
+                Glide.with(headerIcon.context)
+                    .load("https://freepngimg.com/thumb/city/36275-3-city-hd.png")
+                    .into(headerIcon)
+
                 temperatureValue.text = temp.toString()
                 feelsLikeValue.text = feelsLike.toString()
             }
         }
     }
+
 }

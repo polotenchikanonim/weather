@@ -9,13 +9,13 @@
         android:id="@+id/nav_home"
         android:name="local.kas.weather.view.cities.CitiesFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_weather" />
+        tools:layout="@layout/fragment_cities" />
 
     <fragment
         android:id="@+id/nav_details"
-        android:name="local.kas.weather.view.weather.DetailsFragment"
+        android:name="local.kas.weather.view.weather.WeatherFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_weather" />
 
 
 

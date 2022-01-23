@@ -9,9 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import local.kas.weather.R
-import local.kas.weather.databinding.FragmentWeatherBinding
-import local.kas.weather.model.Weather
-import local.kas.weather.view.weather.BUNDLE_KEY
+import local.kas.weather.databinding.FragmentCitiesBinding
+
+import local.kas.weather.model.City
+import local.kas.weather.utils.BUNDLE_KEY
 import local.kas.weather.viewmodel.CitiesAppState
 
 
@@ -19,7 +20,7 @@ class CitiesFragment : Fragment(), OnItemClickListener {
 
     private var isRussian = true
     private lateinit var weatherViewModel: CitiesViewModel
-    private var _binding: FragmentWeatherBinding? = null
+    private var _binding: FragmentCitiesBinding? = null
     private val binding get() = _binding!!
 
     private val recyclerViewAdapter: RecyclerViewAdapter by lazy {
@@ -31,7 +32,7 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         weatherViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
-        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
+        _binding = FragmentCitiesBinding.inflate(inflater, container, false)
         initView()
 
         weatherViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
@@ -96,12 +97,11 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         _binding = null
     }
 
-
-    override fun onItemClick(weather: Weather) {
+    override fun onItemClick(city: City) {
         val navController = requireActivity().findNavController(R.id.container)
         navController.navigate(
             R.id.nav_details,
-            Bundle().apply { putParcelable(BUNDLE_KEY, weather) }
+            Bundle().apply { putParcelable(BUNDLE_KEY, city) }
         )
     }
 }

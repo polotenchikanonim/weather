@@ -1,7 +1,7 @@
 package local.kas.weather.view.cities
 
-import local.kas.weather.model.Weather
+import local.kas.weather.model.City
 
 interface OnItemClickListener {
-    fun onItemClick(weather: Weather)
+    fun onItemClick(city: City)
 }

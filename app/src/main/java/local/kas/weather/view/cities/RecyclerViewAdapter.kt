@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import local.kas.weather.R
-import local.kas.weather.model.Weather
+import local.kas.weather.model.City
 
 class RecyclerViewAdapter(val listener: OnItemClickListener) :
     RecyclerView.Adapter<RecyclerViewAdapter.WeatherViewHolder>() {
 
-    private var weatherData: List<Weather> = listOf()
+    private var weatherData: List<City> = listOf()
 
-    fun setWeather(data: List<Weather>) {
+    fun setWeather(data: List<City>) {
         weatherData = data
         notifyDataSetChanged() // fixme please. Sorry i don't know
     }
@@ -36,11 +36,11 @@ class RecyclerViewAdapter(val listener: OnItemClickListener) :
 
 
     inner class WeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(weather: Weather) {
+        fun bind(city: City) {
             itemView.run {
-                findViewById<AppCompatTextView>(R.id.weatherItemTextView).text = weather.city.name
+                findViewById<AppCompatTextView>(R.id.weatherItemTextView).text = city.name
                 setOnClickListener {
-                    listener.onItemClick(weather)
+                    listener.onItemClick(city)
                 }
             }
         }

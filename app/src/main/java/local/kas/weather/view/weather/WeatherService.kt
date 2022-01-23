@@ -4,8 +4,10 @@ import android.app.IntentService
 import android.content.Intent
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import local.kas.weather.BuildConfig
 import local.kas.weather.TAG
 import local.kas.weather.model.WeatherDTO
+import local.kas.weather.utils.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
@@ -26,8 +28,8 @@ class WeatherService(name: String = "") : IntentService(name) {
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             loadWeather(
-                intent.getDoubleExtra(BUNDLE_KEY_LAT, 0.0),
-                intent.getDoubleExtra(BUNDLE_KEY_LON, 0.0)
+                intent.getDoubleExtra(LATITUDE_EXTRA, 0.0),
+                intent.getDoubleExtra(LONGITUDE_EXTRA, 0.0)
             )
         }
     }
@@ -48,23 +50,24 @@ class WeatherService(name: String = "") : IntentService(name) {
     }
 
     private fun loadWeather(lat: Double, lon: Double) {
-        val urlAddress = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
         try {
-            val urlConnection = getUrlConnection(urlAddress)
+            val urlConnection =
+                getUrlConnection("$YANDEX_API_URL$YANDEX_API_URL_END_POINT?lat=$lat&lon=$lon")
             BufferedReader(InputStreamReader(urlConnection.inputStream)).use {
                 val response: String = convertResponse(
                     BufferedReader(InputStreamReader(urlConnection.inputStream, "UTF-8"))
                 )
                 with(JSONObject(response).getJSONObject("fact")) {
-                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(Intent(
-                        BROADCAST_ACTION
-                    ).apply {
-                        putExtra(
-                            BUNDLE_KEY_WEATHER, WeatherDTO(
-                                getInt("temp"), getInt("feels_like")
+                    LocalBroadcastManager.getInstance(applicationContext)
+                        .sendBroadcast(Intent(
+                            WEATHER_INTENT_FILTER
+                        ).apply {
+                            putExtra(
+                                BUNDLE_KEY_WEATHER, WeatherDTO(
+                                    getInt("temp"), getInt("feels_like")
+                                )
                             )
-                        )
-                    })
+                        })
                 }
             }
         } catch (socketTimeoutException: SocketTimeoutException) {
@@ -81,7 +84,7 @@ class WeatherService(name: String = "") : IntentService(name) {
         return (url.openConnection() as HttpsURLConnection).apply {
             requestMethod = "GET"
             readTimeout = 2000
-            addRequestProperty("X-Yandex-API-Key", "33aa2677-2f5d-44cb-9891-6b4a1781f4cd")
+            addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
         }
     }
 

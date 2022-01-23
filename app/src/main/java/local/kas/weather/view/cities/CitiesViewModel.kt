@@ -2,7 +2,7 @@ package local.kas.weather.view.cities
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import local.kas.weather.model.RepositoryImpl
+import local.kas.weather.repository.RepositoryImpl
 import local.kas.weather.viewmodel.CitiesAppState
 
 
