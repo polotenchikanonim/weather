@@ -13,5 +13,7 @@
     <string name="try_one_more_time">to try one more time</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cities">Города</string>
+    <string name="history">История</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package local.kas.weather.repository
+package local.kas.weather.repository.remote
 
 import local.kas.weather.model.WeatherDTO
 import local.kas.weather.utils.LAT

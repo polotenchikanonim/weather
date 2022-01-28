@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import local.kas.weather.R
 import local.kas.weather.databinding.FragmentCitiesBinding
-
 import local.kas.weather.model.City
 import local.kas.weather.utils.BUNDLE_KEY
 import local.kas.weather.viewmodel.CitiesAppState
@@ -27,7 +25,6 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         RecyclerViewAdapter(this)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -37,7 +34,6 @@ class CitiesFragment : Fragment(), OnItemClickListener {
 
         weatherViewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         weatherViewModel.getWeatherFromLocalSourceRus()
-
         return binding.root
     }
 
@@ -65,13 +61,7 @@ class CitiesFragment : Fragment(), OnItemClickListener {
             if (weatherFragmentLoadingLayout.visibility == View.VISIBLE) {
                 weatherFragmentLoadingLayout.visibility = View.GONE
             }
-
             when (citiesAppState) {
-                is CitiesAppState.Error -> {
-                    getString(R.string.city_coordinates)
-                    binding.root.showErrorSnack(R.string.city_coordinates)
-                }
-                is CitiesAppState.Loading -> weatherFragmentLoadingLayout.visibility = View.VISIBLE
                 is CitiesAppState.Success -> {
                     showCities(citiesAppState)
                 }
@@ -83,15 +73,6 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         recyclerViewAdapter.setWeather(citiesAppState.weatherData)
     }
 
-    private fun View.showErrorSnack(snack: Int) {
-        Snackbar.make(
-            this, getString(snack), Snackbar.LENGTH_LONG
-        ).setAction(getString(R.string.try_one_more_time)) {
-            request()
-        }.show()
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -99,9 +80,6 @@ class CitiesFragment : Fragment(), OnItemClickListener {
 
     override fun onItemClick(city: City) {
         val navController = requireActivity().findNavController(R.id.container)
-        navController.navigate(
-            R.id.nav_details,
-            Bundle().apply { putParcelable(BUNDLE_KEY, city) }
-        )
+        navController.navigate(R.id.nav_weather, Bundle().apply { putParcelable(BUNDLE_KEY, city) })
     }
 }

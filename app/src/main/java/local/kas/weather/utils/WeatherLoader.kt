@@ -31,7 +31,6 @@
 //        val factJ = jsonObject.getJSONObject("fact")
 //        val temp = factJ.getInt("temp")
 //        val feelsLike = factJ.getInt("feels_like")
-////        val fact = Fact(temp, feelsLike)
 //        return WeatherDTO(temp, feelsLike)
 //    }
 //

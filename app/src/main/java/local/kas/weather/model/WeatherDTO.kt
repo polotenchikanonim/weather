@@ -6,12 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class WeatherDTO(
-//    val fact: Fact
     val temp: Int,
-    val feelsLike: Int
+    val feelsLike: Int,
+    val icon: String
 ) : Parcelable
-
-//data class Fact(
-//    val temp: Int,
-//    val feelsLike: Int
-//)

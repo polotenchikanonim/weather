@@ -3,20 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_cities">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_cities"
         android:name="local.kas.weather.view.cities.CitiesFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_cities" />
 
     <fragment
-        android:id="@+id/nav_details"
+        android:id="@+id/nav_weather"
         android:name="local.kas.weather.view.weather.WeatherFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_weather" />
 
+    <fragment
+        android:id="@+id/nav_history"
+        android:name="local.kas.weather.view.history.HistoryFragment"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history" />
 
 
 </navigation>

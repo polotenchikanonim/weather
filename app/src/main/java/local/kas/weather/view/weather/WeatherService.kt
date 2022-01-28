@@ -2,10 +2,8 @@ package local.kas.weather.view.weather
 
 import android.app.IntentService
 import android.content.Intent
-import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import local.kas.weather.BuildConfig
-import local.kas.weather.TAG
 import local.kas.weather.model.WeatherDTO
 import local.kas.weather.utils.*
 import org.json.JSONObject
@@ -21,10 +19,6 @@ import javax.net.ssl.HttpsURLConnection
 
 class WeatherService(name: String = "") : IntentService(name) {
 
-    private fun createLogMessage(message: String) {
-        Log.d(TAG, message)
-    }
-
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
             loadWeather(
@@ -34,18 +28,7 @@ class WeatherService(name: String = "") : IntentService(name) {
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        createLogMessage("onCreate")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        createLogMessage("onDestroy")
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        createLogMessage("onStart $flags")
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -64,7 +47,7 @@ class WeatherService(name: String = "") : IntentService(name) {
                         ).apply {
                             putExtra(
                                 BUNDLE_KEY_WEATHER, WeatherDTO(
-                                    getInt("temp"), getInt("feels_like")
+                                    getInt("temp"), getInt("feels_like"), getString("icon")
                                 )
                             )
                         })

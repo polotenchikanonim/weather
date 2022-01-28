@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -50,17 +49,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cityCoordinates" />
 
+
         <TextView
             android:id="@+id/temperatureValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_15"
             android:textSize="@dimen/sp_40"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/temperatureLabel"
             tools:text="+15" />
+
+        <ImageView
+            android:id="@+id/iconWeather"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            app:layout_constraintStart_toEndOf="@+id/temperatureValue"
+            app:layout_constraintTop_toBottomOf="@+id/temperatureLabel"
+            android:contentDescription="@string/todo" />
 
         <TextView
             android:id="@+id/feelsLikeLabel"
@@ -70,7 +78,7 @@
             android:text="@string/feels_like_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/temperatureValue" />
+            app:layout_constraintTop_toBottomOf="@+id/iconWeather" />
 
         <TextView
             android:id="@+id/feelsLikeValue"

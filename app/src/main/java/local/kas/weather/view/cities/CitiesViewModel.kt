@@ -2,15 +2,15 @@ package local.kas.weather.view.cities
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import local.kas.weather.repository.RepositoryImpl
+import local.kas.weather.repository.local.RepositoryLocalImpl
 import local.kas.weather.viewmodel.CitiesAppState
 
 
 class CitiesViewModel(private val liveDataToObserve: MutableLiveData<CitiesAppState> = MutableLiveData()) :
     ViewModel() {
 
-    private val repositoryImpl: RepositoryImpl by lazy {
-        RepositoryImpl()
+    private val repositoryLocalImpl: RepositoryLocalImpl by lazy {
+        RepositoryLocalImpl()
     }
 
     fun getLiveData() = liveDataToObserve
@@ -20,15 +20,15 @@ class CitiesViewModel(private val liveDataToObserve: MutableLiveData<CitiesAppSt
     fun getWeatherFromLocalSourceWorld() = getDataFromLocalSource(isRussian = false)
 
     private fun getDataFromLocalSource(isRussian: Boolean) {
-        liveDataToObserve.value = CitiesAppState.Loading(0)
         liveDataToObserve.postValue(
             CitiesAppState.Success(
                 if (isRussian) {
-                    repositoryImpl.getWeatherFromLocalStorageRus()
+                    repositoryLocalImpl.getWeatherFromLocalStorageRus()
                 } else {
-                    repositoryImpl.getWeatherFromLocalStorageWorld()
+                    repositoryLocalImpl.getWeatherFromLocalStorageWorld()
                 }
             )
         )
     }
+
 }
