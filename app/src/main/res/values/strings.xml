@@ -16,5 +16,6 @@
     <string name="cities">Города</string>
     <string name="history">История</string>
     <string name="contacts">Контакты</string>
+    <string name="authorities">local.kas.weather.provider.EducationContentProvider</string>
 
 </resources>

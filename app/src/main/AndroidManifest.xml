@@ -36,6 +36,12 @@
 
         <service android:name=".view.weather.WeatherService" />
 
+        <provider
+            android:authorities="@string/authorities"
+            android:name=".provider.EducationContentProvider"
+            android:enabled="true"
+            android:exported="true"/>
+
     </application>
 
 </manifest>
