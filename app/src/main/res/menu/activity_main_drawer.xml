@@ -13,5 +13,11 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/history" />
+
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/contacts" />
     </group>
+
 </menu>

@@ -37,10 +37,11 @@ class HistoryRecyclerViewAdapter(private val onMyClickListener: OnMyClickListene
             holder.cityName.text = cityName
             holder.temperature.text = temperature.toString()
             holder.feelsLike.text = feelsLike.toString()
-            holder.icon.loadUrl("https://yastatic.net/weather/i/icons/funky/dark/$icon.svg")
-            holder.itemView.setOnClickListener {
-                onMyClickListener.onClick(this)
-            }
+            holder.loadIcon()
+//            holder.icon.loadUrl("https://yastatic.net/weather/i/icons/funky/dark/$icon.svg")
+//            holder.itemView.setOnClickListener {
+//                onMyClickListener.onClick(this)
+//            }
         }
     }
 
@@ -51,6 +52,10 @@ class HistoryRecyclerViewAdapter(private val onMyClickListener: OnMyClickListene
         val temperature: TextView = binding.temperature
         val feelsLike: TextView = binding.feelsLike
         val icon: AppCompatImageView = binding.icon
+
+        fun loadIcon() {
+            icon.loadUrl("https://yastatic.net/weather/i/icons/funky/dark/$icon.svg")
+        }
     }
 
     private fun ImageView.loadUrl(url: String) {

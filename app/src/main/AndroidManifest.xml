@@ -4,7 +4,8 @@
     package="local.kas.weather">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <application
         android:name=".room.App"
         android:allowBackup="false"
@@ -25,14 +26,15 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".MyBroadcastReceiver"
+        <receiver
+            android:name=".MyBroadcastReceiver"
             android:exported="true"
             android:permission="TODO"
             tools:ignore="ExportedReceiver">
 
         </receiver>
 
-        <service android:name=".view.weather.WeatherService"/>
+        <service android:name=".view.weather.WeatherService" />
 
     </application>
 
