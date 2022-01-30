@@ -17,5 +17,10 @@
     <string name="history">История</string>
     <string name="contacts">Контакты</string>
     <string name="authorities">local.kas.weather.provider.EducationContentProvider</string>
+    <string name="map">map</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        AIza
+    </string>
+    <string name="_1">Москва, Крассная площадь 1</string>
 
 </resources>

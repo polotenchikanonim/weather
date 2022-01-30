@@ -1,16 +1,11 @@
 package local.kas.weather.repository.remote
 
-import com.google.gson.GsonBuilder
 import local.kas.weather.BuildConfig
-import local.kas.weather.model.WeatherDTO
 import local.kas.weather.utils.YANDEX_API_KEY
 import local.kas.weather.utils.YANDEX_API_URL
 import local.kas.weather.utils.YANDEX_API_URL_END_POINT
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class RepositoryRemoteImpl : RepositoryServerWeather {

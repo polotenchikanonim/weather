@@ -1,7 +1,9 @@
-package local.kas.weather.room
+package local.kas.weather
 
 import android.app.Application
 import androidx.room.Room
+import local.kas.weather.room.HistoryDataBase
+import local.kas.weather.room.HistoryWeatherDao
 
 class App : Application() {
 

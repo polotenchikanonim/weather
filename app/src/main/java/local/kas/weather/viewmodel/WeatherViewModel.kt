@@ -39,8 +39,16 @@ class WeatherViewModel(
                     with(JSONObject(it.string()).getJSONObject("fact")) {
                         val temp = getInt("temp")
                         val feelsLike = getInt("feels_like")
-                        val icon  = getString("icon")
-                        liveData.postValue(WeatherAppState.Success(WeatherDTO(temp, feelsLike, icon)))
+                        val icon = getString("icon")
+                        liveData.postValue(
+                            WeatherAppState.Success(
+                                WeatherDTO(
+                                    temp,
+                                    feelsLike,
+                                    icon
+                                )
+                            )
+                        )
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package local.kas.weather.view.content_provider
+package local.kas.weather.view.contacts
 
 import android.Manifest
 import android.app.AlertDialog
@@ -19,10 +19,6 @@ class ContactsFragment : Fragment() {
 
     private var _binding: ContactsFragmentBinding? = null
     private val binding get() = _binding!!
-
-//    private val viewModel: ContactsViewModel by lazy {
-//        ViewModelProvider(this).get(ContactsViewModel::class.java)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
