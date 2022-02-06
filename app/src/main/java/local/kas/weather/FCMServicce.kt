@@ -1,24 +1,24 @@
 package local.kas.weather
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 class FCMService : FirebaseMessagingService() {
 
-    override fun onNewToken(s: String) {
-        super.onNewToken(s)
-        Log.d("myLogs", "token $s")
-    }
+    private val channelId = "channelId"
+    private val myTitle = "myTitle"
+    private val myMessage = "myMessage"
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val data = remoteMessage.data
         if (data.isNotEmpty()) {
-            val title = data["myTitle"]
-            val message = data["myMessage"]
+            val title = data[myTitle]
+            val message = data[myMessage]
             if (!title.isNullOrBlank() && !message.isNullOrEmpty()) {
                 pushNotification(title, message)
             }
@@ -27,7 +27,6 @@ class FCMService : FirebaseMessagingService() {
 
     private fun pushNotification(title: String, message: String) {
 
-        val channelId = "channel_id"
         val notificationId = 1
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId).apply {
