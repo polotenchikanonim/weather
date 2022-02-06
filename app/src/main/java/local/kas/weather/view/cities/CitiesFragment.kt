@@ -24,11 +24,12 @@ import local.kas.weather.utils.BUNDLE_KEY
 import local.kas.weather.viewmodel.CitiesAppState
 import java.util.*
 
+
 private const val MIN_DISTANCE = 100f
 private const val REFRESH_PERIOD = 60000L
+private const val IS_WORLD_KEY = "LIST_OF_TOWNS_KEY"
 
 class CitiesFragment : Fragment(), OnItemClickListener {
-
     private var isRussian = true
     private lateinit var weatherViewModel: CitiesViewModel
 
@@ -46,28 +47,48 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         _binding = FragmentCitiesBinding.inflate(inflater, container, false)
         initView()
         weatherViewModel.getLiveData().observe(viewLifecycleOwner) { renderData(it) }
-        weatherViewModel.getWeatherFromLocalSourceRus()
         return binding.root
     }
 
-    private fun initView() {
-        with(binding) {
-            mainFragmentRecyclerView.adapter = recyclerViewAdapter
-            mainFragmentFAB.setOnClickListener {
-                request()
-            }
-            buttonGetLocalWeather.setOnClickListener {
-                checkPermission()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        weatherViewModel.getWeatherFromLocalSourceRus()
+        showListOfTowns()
+    }
+
+    private fun showListOfTowns() {
+        requireActivity().let {
+            if (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
+                changeWeatherDataSet()
+            } else {
+                weatherViewModel.getWeatherFromLocalSourceRus()
             }
         }
     }
 
-    private fun request() {
+    private fun changeWeatherDataSet() {
         isRussian = !isRussian
         if (isRussian) {
             weatherViewModel.getWeatherFromLocalSourceRus()
         } else {
             weatherViewModel.getWeatherFromLocalSourceWorld()
+        }
+        saveListOfTowns(!isRussian)
+    }
+
+    private fun saveListOfTowns(isDataSetWorld: Boolean) {
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()) {
+                putBoolean(IS_WORLD_KEY, isDataSetWorld)
+                apply()
+            }
+        }
+    }
+
+    private fun initView() {
+        with(binding) {
+            mainFragmentRecyclerView.adapter = recyclerViewAdapter
+            changeCitiesButton.setOnClickListener { changeWeatherDataSet() }
+            buttonGetLocalWeather.setOnClickListener { checkPermission() }
         }
     }
 
@@ -103,28 +124,24 @@ class CitiesFragment : Fragment(), OnItemClickListener {
         navController.navigate(R.id.nav_weather, Bundle().apply { putParcelable(BUNDLE_KEY, city) })
     }
 
-
     private fun getLocation() {
-        val locationManager =
-            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.getProvider(LocationManager.GPS_PROVIDER).let {
-                if (ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return
+        (requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager).run {
+            if (isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getProvider(LocationManager.GPS_PROVIDER)?.let {
+                    if (ActivityCompat.checkSelfPermission(
+                            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
                 }
-                locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, REFRESH_PERIOD,
-                    MIN_DISTANCE, locationListener
+                requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, REFRESH_PERIOD, MIN_DISTANCE, locationListener
                 )
-
-            }
-        } else {
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)?.let {
-                getAddress(it)
+            } else {
+                getLastKnownLocation(LocationManager.GPS_PROVIDER)?.let { location ->
+                    getAddress(location)
+                }
             }
         }
     }
@@ -150,11 +167,10 @@ class CitiesFragment : Fragment(), OnItemClickListener {
     }
 
     private fun checkPermission() {
-        requireContext().let {
+        requireContext().run {
             when {
                 ContextCompat.checkSelfPermission(
-                    it,
-                    Manifest.permission.ACCESS_FINE_LOCATION
+                    this, Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     getLocation()
                 }
@@ -169,11 +185,12 @@ class CitiesFragment : Fragment(), OnItemClickListener {
     }
 
     private fun showRatioDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Доступ к geo").setMessage("message")
-            .setPositiveButton("предоставить доступ") { _, _ -> requestPermission() }
-            .setNegativeButton("no") { dialog, _ -> dialog.dismiss() }
-            .create().show()
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle("Доступ к geo").setMessage("message")
+            setPositiveButton("предоставить доступ") { _, _ -> requestPermission() }
+            setNegativeButton("no") { dialog, _ -> dialog.dismiss() }
+            create().show()
+        }
     }
 
     private val locationListener = LocationListener {

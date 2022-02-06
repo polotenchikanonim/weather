@@ -34,9 +34,7 @@ class WeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getLiveData().observe(viewLifecycleOwner, {
-            renderData(it)
-        })
+        viewModel.getLiveData().observe(viewLifecycleOwner) { renderData(it) }
         arguments?.let { it ->
             it.getParcelable<City>(BUNDLE_KEY)?.let {
                 binding.cityName.text = it.name

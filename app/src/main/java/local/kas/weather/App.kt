@@ -20,7 +20,6 @@ class App : Application() {
         fun getHistoryWeatherDao(): HistoryWeatherDao {
             if (db == null) {
                 db = Room.databaseBuilder(appInstance!!, HistoryDataBase::class.java, DB_NAME)
-//                    .allowMainThreadQueries()
                     .build()
             }
             return db!!.historyWeatherDao()

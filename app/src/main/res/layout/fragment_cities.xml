@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/mainFragmentFAB"
+        android:id="@+id/changeCitiesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_16"
@@ -32,7 +32,7 @@
         android:layout_margin="@dimen/dp_16"
         android:contentDescription="@string/todo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/mainFragmentFAB"
+        app:layout_constraintBottom_toTopOf="@+id/changeCitiesButton"
         app:maxImageSize="@dimen/dp_50"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
