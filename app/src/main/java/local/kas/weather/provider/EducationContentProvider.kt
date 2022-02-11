@@ -6,8 +6,8 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
-import local.kas.weather.R
 import local.kas.weather.App.Companion.getHistoryWeatherDao
+import local.kas.weather.R
 import local.kas.weather.room.HistoryWeatherEntity
 import local.kas.weather.room.ID
 import local.kas.weather.room.NAME

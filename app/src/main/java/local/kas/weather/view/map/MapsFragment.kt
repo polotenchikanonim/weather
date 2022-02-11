@@ -5,12 +5,9 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,13 +18,10 @@ import local.kas.weather.R
 import local.kas.weather.databinding.FragmentMapsBinding
 import local.kas.weather.model.City
 import local.kas.weather.utils.BUNDLE_KEY
+import local.kas.weather.utils.BaseFragment
 import java.util.*
 
-class MapsFragment : Fragment() {
-
-    private var _binding: FragmentMapsBinding? = null
-    private val binding get() = _binding!!
-
+class MapsFragment : BaseFragment<FragmentMapsBinding>(FragmentMapsBinding::inflate) {
 
     private var map: GoogleMap? = null
     private val markers = arrayListOf<Marker>()
@@ -116,16 +110,6 @@ class MapsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
-        setListeners()
-        return binding.root
-    }
-
     private fun setListeners() {
         binding.request.setOnClickListener {
             search()
@@ -149,6 +133,7 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }

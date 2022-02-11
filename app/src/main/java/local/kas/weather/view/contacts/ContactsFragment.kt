@@ -6,27 +6,14 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Phone
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import local.kas.weather.databinding.ContactsFragmentBinding
+import local.kas.weather.utils.BaseFragment
 
 
-class ContactsFragment : Fragment() {
-
-    private var _binding: ContactsFragmentBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = ContactsFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+class ContactsFragment : BaseFragment<ContactsFragmentBinding>(ContactsFragmentBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +39,6 @@ class ContactsFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun getContacts() {

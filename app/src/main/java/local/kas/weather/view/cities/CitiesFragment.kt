@@ -9,18 +9,16 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import local.kas.weather.R
 import local.kas.weather.databinding.FragmentCitiesBinding
 import local.kas.weather.model.City
 import local.kas.weather.utils.BUNDLE_KEY
+import local.kas.weather.utils.BaseFragment
 import local.kas.weather.viewmodel.CitiesAppState
 import java.util.*
 
@@ -29,29 +27,23 @@ private const val MIN_DISTANCE = 100f
 private const val REFRESH_PERIOD = 60000L
 private const val IS_WORLD_KEY = "LIST_OF_TOWNS_KEY"
 
-class CitiesFragment : Fragment(), OnItemClickListener {
-    private var isRussian = true
-    private lateinit var weatherViewModel: CitiesViewModel
+class CitiesFragment : BaseFragment<FragmentCitiesBinding>(FragmentCitiesBinding::inflate),
+    OnItemClickListener {
 
-    private var _binding: FragmentCitiesBinding? = null
-    private val binding get() = _binding!!
+    private var isRussian = true
+
+    private val citiesViewModel: CitiesViewModel by lazy {
+        ViewModelProvider(this).get(CitiesViewModel::class.java)
+    }
 
     private val recyclerViewAdapter: RecyclerViewAdapter by lazy {
         RecyclerViewAdapter(this)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        weatherViewModel = ViewModelProvider(this).get(CitiesViewModel::class.java)
-        _binding = FragmentCitiesBinding.inflate(inflater, container, false)
-        initView()
-        weatherViewModel.getLiveData().observe(viewLifecycleOwner) { renderData(it) }
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        weatherViewModel.getWeatherFromLocalSourceRus()
+        initView()
+        citiesViewModel.getLiveData().observe(viewLifecycleOwner) { renderData(it) }
+        citiesViewModel.getWeatherFromLocalSourceRus()
         showListOfTowns()
     }
 
@@ -60,7 +52,7 @@ class CitiesFragment : Fragment(), OnItemClickListener {
             if (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
                 changeWeatherDataSet()
             } else {
-                weatherViewModel.getWeatherFromLocalSourceRus()
+                citiesViewModel.getWeatherFromLocalSourceRus()
             }
         }
     }
@@ -68,9 +60,9 @@ class CitiesFragment : Fragment(), OnItemClickListener {
     private fun changeWeatherDataSet() {
         isRussian = !isRussian
         if (isRussian) {
-            weatherViewModel.getWeatherFromLocalSourceRus()
+            citiesViewModel.getWeatherFromLocalSourceRus()
         } else {
-            weatherViewModel.getWeatherFromLocalSourceWorld()
+            citiesViewModel.getWeatherFromLocalSourceWorld()
         }
         saveListOfTowns(!isRussian)
     }
@@ -108,11 +100,6 @@ class CitiesFragment : Fragment(), OnItemClickListener {
 
     private fun showCities(citiesAppState: CitiesAppState.Success) {
         recyclerViewAdapter.setWeather(citiesAppState.weatherData)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onItemClick(city: City) {

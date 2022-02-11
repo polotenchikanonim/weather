@@ -1,12 +1,9 @@
 package local.kas.weather.view.weather
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -14,19 +11,16 @@ import coil.request.ImageRequest
 import com.bumptech.glide.Glide
 import local.kas.weather.R
 import local.kas.weather.databinding.FragmentWeatherBinding
-
 import local.kas.weather.model.City
 import local.kas.weather.model.WeatherDTO
 import local.kas.weather.model.WeatherHistory
 import local.kas.weather.utils.BUNDLE_KEY
+import local.kas.weather.utils.BaseFragment
 import local.kas.weather.viewmodel.WeatherAppState
 import local.kas.weather.viewmodel.WeatherViewModel
 
 
-class WeatherFragment : Fragment() {
-
-    private var _binding: FragmentWeatherBinding? = null
-    private val binding get() = _binding!!
+class WeatherFragment : BaseFragment<FragmentWeatherBinding>(FragmentWeatherBinding::inflate) {
 
     private val viewModel: WeatherViewModel by lazy {
         ViewModelProvider(this).get(WeatherViewModel::class.java)
@@ -45,12 +39,12 @@ class WeatherFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+//    ): View {
+//        _binding = FragmentWeatherBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
 
     private fun renderData(weatherAppState: WeatherAppState) {
         when (weatherAppState) {

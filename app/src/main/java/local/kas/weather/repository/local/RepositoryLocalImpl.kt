@@ -1,10 +1,9 @@
 package local.kas.weather.repository.local
 
+import local.kas.weather.App
 import local.kas.weather.model.WeatherHistory
-
 import local.kas.weather.model.getRussianCities
 import local.kas.weather.model.getWorldCities
-import local.kas.weather.App
 import local.kas.weather.room.HistoryWeatherEntity
 
 

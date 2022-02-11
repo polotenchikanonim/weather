@@ -1,18 +1,14 @@
 package local.kas.weather.view
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import local.kas.weather.R
 import local.kas.weather.databinding.ActivityMainBinding
 
@@ -27,20 +23,32 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.container)
+//        val drawerLayout: DrawerLayout = binding.drawerLayout
+//        val navView: NavigationView = binding.navView
+//        val navController = findNavController(R.id.container)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment?
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_cities, R.id.nav_contacts, R.id.nav_maps
-            ), drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        navHostFragment?.let {
+            appBarConfiguration = AppBarConfiguration(
+                setOf(
+                    R.id.nav_cities, R.id.nav_contacts, R.id.nav_maps
+                ), binding.drawerLayout
+            )
+            setupActionBarWithNavController(it.navController, appBarConfiguration)
+            binding.navView.setupWithNavController(it.navController)
+
+//
+        }
+//        appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.nav_cities, R.id.nav_contacts, R.id.nav_maps
+//            ), drawerLayout
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

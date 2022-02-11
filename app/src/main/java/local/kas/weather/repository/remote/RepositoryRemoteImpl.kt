@@ -11,18 +11,6 @@ import okhttp3.Request
 class RepositoryRemoteImpl : RepositoryServerWeather {
 
     private var okHttpClient: OkHttpClient? = null
-//    override fun getWeatherFromServerRetrofit(lat: Double, lon: Double, callback: Callback<WeatherDTO>) {
-//        val builder = Retrofit.Builder()
-//            .baseUrl(YANDEX_API_URL)
-//            .addConverterFactory(
-//                GsonConverterFactory.create(
-//                    GsonBuilder().setLenient().create()
-//                )
-//            )
-//            .build().create(WeatherApi::class.java)
-//        builder.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon).enqueue(callback)
-//    }
-
 
     override fun getWeatherFromServerHttp(
         lat: Double,
